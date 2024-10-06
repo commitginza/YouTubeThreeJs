@@ -10,6 +10,7 @@
         width: 100%;
         background: url('Black Elegant Musician YouTube Channel Art.png') no-repeat center center fixed;
         background-size: cover;
+        overscroll-behavior: none;
       }
       a {
         color: #8ff;
@@ -110,6 +111,7 @@
         <li>2本指を置いて指を開くとズームインします。</li>
         <li>2本指を置いて指を閉じるとズームアウトができます。</li>
         <li>2本指を置いて指を移動すると要素が移動します。</li>
+        <li>2本指で回転させると要素が回転します。</li>
       </ul>
     </div>
     <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
@@ -210,6 +212,8 @@
       ];
       let camera, scene, renderer;
       let controls;
+      let initialPinchDistance = null;
+      let initialRotation = null;
       const objects = [];
       const targets = { table: [], sphere: [], helix: [], grid: [] };
       init();
@@ -314,9 +318,38 @@
         } );
         transform( targets.helix, 1000 );
         window.addEventListener( 'resize', onWindowResize );
+        // Prevent default touch behaviors
         window.addEventListener('touchmove', function(e) {
           e.preventDefault();
         }, { passive: false });
+        // Add touch event listeners for rotation
+        window.addEventListener('touchstart', onTouchStart, { passive: false });
+        window.addEventListener('touchmove', onTouchMove, { passive: false });
+        window.addEventListener('touchend', onTouchEnd, { passive: false });
+      }
+      function onTouchStart(event) {
+        if (event.touches.length === 2) {
+          const dx = event.touches[0].pageX - event.touches[1].pageX;
+          const dy = event.touches[0].pageY - event.touches[1].pageY;
+          initialPinchDistance = Math.sqrt(dx * dx + dy * dy);
+          initialRotation = controls.getAzimuthalAngle();
+        }
+      }
+      function onTouchMove(event) {
+        if (event.touches.length === 2 && initialPinchDistance !== null) {
+          event.preventDefault();
+          const dx = event.touches[0].pageX - event.touches[1].pageX;
+          const dy = event.touches[0].pageY - event.touches[1].pageY;
+          const currentPinchDistance = Math.sqrt(dx * dx + dy * dy);
+          const deltaDistance = currentPinchDistance - initialPinchDistance;
+          controls.rotateLeft(-deltaDistance * 0.0005);
+          controls.update();
+        }
+      }
+      function onTouchEnd(event) {
+        if (event.touches.length < 2) {
+          initialPinchDistance = null;
+        }
       }
       function transform( targets, duration ) {
         TWEEN.removeAll();
