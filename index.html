@@ -220,8 +220,14 @@
           image.src = 'https://img.youtube.com/vi/' + table[i] + '/hqdefault.jpg';
           image.className = 'element-image';
           thumbnail.appendChild(image);
+          let linkEnabled = false;
           thumbnail.addEventListener('click', () => {
-            window.open('https://www.youtube.com/watch?v=' + table[i], '_blank');
+            if (!linkEnabled) {
+              linkEnabled = true;
+              image.style.opacity = '0.7';
+            } else {
+              window.open('https://www.youtube.com/watch?v=' + table[i], '_blank');
+            }
           });
           element.appendChild( thumbnail );
           const objectCSS = new CSS3DObject( element );
