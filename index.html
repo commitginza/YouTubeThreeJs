@@ -213,6 +213,9 @@
           element.className = 'element element-background';
           const thumbnail = document.createElement('div');
           thumbnail.className = 'thumbnail';
+          const image = document.createElement('img');
+          image.src = 'https://img.youtube.com/vi/' + table[i] + '/hqdefault.jpg';
+          image.className = 'element-image';
           thumbnail.appendChild(image);
           thumbnail.addEventListener('click', () => {
             const iframe = document.createElement('iframe');
