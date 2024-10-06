@@ -221,15 +221,7 @@
           image.className = 'element-image';
           thumbnail.appendChild(image);
           thumbnail.addEventListener('click', () => {
-            const iframe = document.createElement('iframe');
-            iframe.src = 'https://www.youtube.com/embed/' + table[i] + '?autoplay=1';
-            iframe.width = '320';
-            iframe.height = '240';
-            iframe.frameBorder = '0';
-            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-            iframe.allowFullscreen = true;
-            element.innerHTML = '';
-            element.appendChild(iframe);
+            window.open('https://www.youtube.com/watch?v=' + table[i], '_blank');
           });
           element.appendChild( thumbnail );
           const objectCSS = new CSS3DObject( element );
@@ -286,21 +278,21 @@
         controls.addEventListener( 'change', render );
         const buttonTable = document.getElementById( 'table' );
         buttonTable.addEventListener( 'click', function () {
-          transform( targets.table, 2000 );
+          transform( targets.table, 1000 );
         } );
         const buttonSphere = document.getElementById( 'sphere' );
         buttonSphere.addEventListener( 'click', function () {
-          transform( targets.sphere, 2000 );
+          transform( targets.sphere, 1000 );
         } );
         const buttonHelix = document.getElementById( 'helix' );
         buttonHelix.addEventListener( 'click', function () {
-          transform( targets.helix, 2000 );
+          transform( targets.helix, 1000 );
         } );
         const buttonGrid = document.getElementById( 'grid' );
         buttonGrid.addEventListener( 'click', function () {
-          transform( targets.grid, 2000 );
+          transform( targets.grid, 1000 );
         } );
-        transform( targets.helix, 2000 );
+        transform( targets.helix, 1000 );
         window.addEventListener( 'resize', onWindowResize );
       }
       function transform( targets, duration ) {
