@@ -8,7 +8,7 @@
       body {
         margin: 0;
         width: 100%;
-        background: url('Black Elegant Musician YouTube Channel Art.png') no-repeat center center fixed;
+        background: url('/mnt/data/IMG_2487.jpeg') no-repeat center center fixed;
         background-size: cover;
       }
       a {
@@ -58,30 +58,28 @@
       }
       #help {
         position: fixed;
-        bottom: 45px;
-        right: 0;
-        background: rgba(0, 0, 0, 1);
+        bottom: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.7);
         color: #fff;
-        border-radius: 20px 0 0 0;
+        border-radius: 50%;
         width: 50px;
         height: 50px;
         text-align: center;
         line-height: 50px;
         font-size: 24px;
         cursor: pointer;
-        z-index: 1;
       }
       #helpText {
         display: none;
         position: fixed;
-        bottom: 45px;
-        right: 0;
-        background: rgba(0, 0, 0, 1);
+        bottom: 80px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.7);
         color: #fff;
         padding: 10px;
         border-radius: 5px;
-        width: 90%;
-        border-radius: 5px 0 0 0;
+        max-width: 200px;
         font-size: 14px;
       }
     </style>
@@ -89,19 +87,18 @@
   <body>
     <div id="container"></div>
     <div id="menu">
-      <button id="table">一覧</button>
-      <button id="sphere">球体</button>
-      <button id="helix">螺旋</button>
-      <button id="grid">グリッド</button>
+      <button id="table">TABLE</button>
+      <button id="sphere">SPHERE</button>
+      <button id="helix">HELIX</button>
+      <button id="grid">GRID</button>
     </div>
     <div id="help">?</div>
     <div id="helpText">
       <p>スマホ操作方法:</p>
       <ul>
-        <li>1本指で上下左右に指を移動すると要素が回転</li>
-        <li>2本指を置いて指を開くとズームイン</li>
-        <li>2本指を置いて指を閉じるとズームアウト</li>
-        <li>2本指を置いて指を移動すると要素が移動</li>
+        <li>ドラッグで視点を回転できます。</li>
+        <li>ピンチでズームイン・ズームアウトができます。</li>
+        <li>画面をスワイプしてパン（移動）できます。</li>
       </ul>
     </div>
     <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
@@ -214,13 +211,20 @@
         for ( let i = 0; i < table.length; i += 3 ) {
           const element = document.createElement( 'div' );
           element.className = 'element element-background';
-          const thumbnail = document.createElement( 'a' );
-          thumbnail.href = 'https://www.youtube.com/watch?v=' + table[i];
-          thumbnail.target = '_blank';
-          const image = document.createElement( 'img' );
-          image.src = 'https://img.youtube.com/vi/' + table[i] + '/hqdefault.jpg';
-          image.className = 'element-image';
-          thumbnail.appendChild( image );
+          const thumbnail = document.createElement('div');
+          thumbnail.className = 'thumbnail';
+          thumbnail.appendChild(image);
+          thumbnail.addEventListener('click', () => {
+            const iframe = document.createElement('iframe');
+            iframe.src = 'https://www.youtube.com/embed/' + table[i] + '?autoplay=1';
+            iframe.width = '320';
+            iframe.height = '240';
+            iframe.frameBorder = '0';
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+            iframe.allowFullscreen = true;
+            element.innerHTML = '';
+            element.appendChild(iframe);
+          });
           element.appendChild( thumbnail );
           const objectCSS = new CSS3DObject( element );
           objectCSS.position.x = Math.random() * 4000 - 2000;
@@ -276,21 +280,21 @@
         controls.addEventListener( 'change', render );
         const buttonTable = document.getElementById( 'table' );
         buttonTable.addEventListener( 'click', function () {
-          transform( targets.table, 1000 );
+          transform( targets.table, 2000 );
         } );
         const buttonSphere = document.getElementById( 'sphere' );
         buttonSphere.addEventListener( 'click', function () {
-          transform( targets.sphere, 1000 );
+          transform( targets.sphere, 2000 );
         } );
         const buttonHelix = document.getElementById( 'helix' );
         buttonHelix.addEventListener( 'click', function () {
-          transform( targets.helix, 1000 );
+          transform( targets.helix, 2000 );
         } );
         const buttonGrid = document.getElementById( 'grid' );
         buttonGrid.addEventListener( 'click', function () {
-          transform( targets.grid, 1000 );
+          transform( targets.grid, 2000 );
         } );
-        transform( targets.helix, 1000 );
+        transform( targets.helix, 2000 );
         window.addEventListener( 'resize', onWindowResize );
       }
       function transform( targets, duration ) {
