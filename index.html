@@ -314,9 +314,9 @@
         } );
         const buttonGrid = document.getElementById( 'grid' );
         buttonGrid.addEventListener( 'click', function () {
-          transform( targets.table, 1000 );
+          transform( targets.grid, 1000 );
         } );
-        transform( targets.helix, 1000 );
+        transform( targets.table, 1000 );
         window.addEventListener( 'resize', onWindowResize );
         // Prevent default touch behaviors
         window.addEventListener('touchmove', function(e) {
