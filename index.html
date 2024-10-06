@@ -234,13 +234,14 @@
           const logo = document.createElement('img');
           logo.src = 'https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png';
           logo.className = 'youtube-logo';
+          logo.style.display = 'none';
           thumbnail.appendChild(logo);
           let linkEnabled = false;
           thumbnail.addEventListener('click', () => {
             if (!linkEnabled) {
               linkEnabled = true;
               image.style.opacity = '0.7';
-              logo.style.display = 'none';
+              logo.style.display = 'block';
             } else {
               window.open('https://www.youtube.com/watch?v=' + table[i], '_blank');
             }
