@@ -41,6 +41,16 @@
         width: 320px;
         height: 240px;
       }
+      .youtube-logo {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 64px;
+        height: 64px;
+        opacity: 0.8;
+        pointer-events: none;
+      }
       button {
         color: rgb(255 255 255 / 75%);
         background: transparent;
@@ -216,15 +226,21 @@
           element.className = 'element element-background';
           const thumbnail = document.createElement('div');
           thumbnail.className = 'thumbnail';
+          thumbnail.style.position = 'relative';
           const image = document.createElement('img');
           image.src = 'https://img.youtube.com/vi/' + table[i] + '/hqdefault.jpg';
           image.className = 'element-image';
           thumbnail.appendChild(image);
+          const logo = document.createElement('img');
+          logo.src = 'https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png';
+          logo.className = 'youtube-logo';
+          thumbnail.appendChild(logo);
           let linkEnabled = false;
           thumbnail.addEventListener('click', () => {
             if (!linkEnabled) {
               linkEnabled = true;
               image.style.opacity = '0.7';
+              logo.style.display = 'none';
             } else {
               window.open('https://www.youtube.com/watch?v=' + table[i], '_blank');
             }
