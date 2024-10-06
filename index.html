@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>YouTube List - コミット銀座</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+      body {
+        margin: 0;
+        width: 100%;
+        background: url('yagi.jpeg') no-repeat center center fixed;
+        background-size: cover;
+      }
+      a {
+        color: #8ff;
+      }
+      #menu {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        background-color: black;
+        padding: 10px 0;
+      }
+      .element {
+        width: 320px;
+        height: 240px;
+        font-family: Helvetica, sans-serif;
+        text-align: center;
+        line-height: normal;
+        cursor: default;
+      }
+      .element:hover {
+        box-shadow: 0px 0px 12px rgb(255 0 0 / 71%);
+        border: 1px solid rgb(255 0 0);
+      }
+      .element-background {
+        background-color: rgba(0, 127, 127, 0.5);
+      }
+      .element-image {
+        width: 320px;
+        height: 240px;
+      }
+      button {
+        color: rgb(255 255 255 / 75%);
+        background: transparent;
+        outline: 1px solid rgb(255 255 255 / 75%);
+        border: 0px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: rgba(0, 255, 255, 0.5);
+      }
+      button:active {
+        color: #000000;
+        background-color: rgba(0, 255, 255, 0.75);
+      }
+      #help {
+        position: fixed;
+        bottom: 45px;
+        right: 0;
+        background: rgba(0, 0, 0, 1);
+        color: #fff;
+        border-radius: 20px 0 0 0;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        line-height: 50px;
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 1;
+      }
+      #helpText {
+        display: none;
+        position: fixed;
+        bottom: 45px;
+        right: 0;
+        background: rgba(0, 0, 0, 1);
+        color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        width: 90%;
+        border-radius: 5px 0 0 0;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+    <div id="menu">
+      <button id="table">一覧</button>
+      <button id="sphere">球体</button>
+      <button id="helix">螺旋</button>
+      <button id="grid">グリッド</button>
+    </div>
+    <div id="help">?</div>
+    <div id="helpText">
+      <p>スマホ操作方法:</p>
+      <ul>
+        <li>1本指で上下左右に指を移動すると要素が回転</li>
+        <li>2本指を置いて指を開くとズームイン</li>
+        <li>2本指を置いて指を閉じるとズームアウト</li>
+        <li>2本指を置いて指を移動すると要素が移動</li>
+      </ul>
+    </div>
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module">
+      import * as THREE from 'three';
+      import { TWEEN } from 'three/addons/libs/tween.module.min.js';
+      import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
+      import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
+      const table = [
+        'fJeo_3n1q18', 8, 10,
+        'x00LxIxcg3M', 8, 9,
+        'LWHaaEo5xr8', 8, 8,
+        '0jJmqrtDm1g', 8, 7,
+        'VXKqg1m9K_8', 8, 6,
+        'bQQg_OZ9MbU', 8, 5,
+        '5Qqh0x5sP9A', 8, 4,
+        'VrvU1BSrqMA', 8, 3,
+        'V8fItV_wOLw', 8, 2,
+        'MU8aEUJjqaw', 8, 1,
+        'MAJPjZgQfz0', 7, 10,
+        'pvXdUmq3Ee4', 7, 9,
+        'SxHhJiAeRjo', 7, 8,
+        'HbLZCw_q9cQ', 7, 7,
+        '0oz4kPL10Fo', 7, 6,
+        'zx1Hfa9taFg', 7, 5,
+        'pqpXIJwHPPQ', 7, 4,
+        '8ypSb4Julps', 7, 3,
+        'fIbF8Je9BJM', 7, 2,
+        'r7miQrMZ-m0', 7, 1,
+        'tZfQ-r9YWow', 6, 10,
+        'jtnfluOzeS0', 6, 9,
+        'ZweI8psFFMg', 6, 8,
+        'ZMnlR4yY-bg', 6, 7,
+        'YhScwNHhDJI', 6, 6,
+        '2iXYl1eTlxk', 6, 5,
+        'CNIy-AbsS2w', 6, 4,
+        '4VtKHjqL5wo', 6, 3,
+        'RRJADfEzE5I', 6, 2,
+        'D4mWaKOwOoU', 6, 1,
+        '335WwNTXjPM', 5, 10,
+        'Fdvekm0NqkU', 5, 9,
+        '8Xu6Cw7RhCM', 5, 8,
+        'Yyct6wr9DaQ', 5, 7,
+        '1oMXUTrbk18', 5, 6,
+        'UUXQZgybNoc', 5, 5,
+        'Kbf_ODfq2no', 5, 4,
+        '1Ud_9TYSw4g', 5, 3,
+        'z2sFjlAI9CM', 5, 2,
+        'QkBB-fsSPvY', 5, 1,
+        '48N5qNmL--k', 4, 10,
+        'QZtO8mESHqM', 4, 9,
+        'GDoj9JgHAvU', 4, 8,
+        'GnGhrTFfkTw', 4, 7,
+        'yM9l438wrCU', 4, 6,
+        'SdGCdLoyuh8', 4, 5,
+        'XjmZlchsV_s', 4, 4,
+        '0ujpjVH1rcc', 4, 3,
+        'iTq0dPzwudw', 4, 2,
+        'GF_Mhso5zxY', 4, 1,
+        'giym5vM9bYM', 3, 10,
+        'uEU-6ExeBos', 3, 9,
+        'TfOXKfAp1-0', 3, 8,
+        'F70dtepXliI', 3, 7,
+        '_nM0D76l-Rg', 3, 6,
+        'O_ebJTKyB04', 3, 5,
+        'EKgKGeTeweo', 3, 4,
+        'f1V4740tIgg', 3, 3,
+        '2gYSF2TA8Xw', 3, 2,
+        'qBjgx-LgqyI', 3, 1,
+        'rqI-D4SgDNE', 2, 10,
+        'j_OfyOo2JVI', 2, 9,
+        'af2U5shnZn4', 2, 8,
+        'tA12aiqP8TQ', 2, 7,
+        'K01oWMtjfNY', 2, 6,
+        '7jm5h5u_39o', 2, 5,
+        '3xvhiKgpl9c', 2, 4,
+        'GpU8CC4vqXo', 2, 3,
+        'eRBFNqU3nPY', 2, 2,
+        'hjVJ_Rvqh4g', 2, 1,
+        'N_qTdkxlLnE', 1, 10,
+        'YobZu58-lwI', 1, 9,
+        'jGwn3qcfSoc', 1, 8,
+        'v9jUB6yquXc', 1, 7,
+        '1fBMw329Zgg', 1, 6,
+        'HFe1-ggYffc', 1, 5,
+        '0pgaSbmjnHc', 1, 4,
+        '5jMLxP9GNao', 1, 3,
+        'b_VD3CEsmt4', 1, 2,
+        'bmd4k3VVpqs', 1, 1
+      ];
+      let camera, scene, renderer;
+      let controls;
+      const objects = [];
+      const targets = { table: [], sphere: [], helix: [], grid: [] };
+      init();
+      animate();
+      function init() {
+        camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 20000 );
+        camera.position.z = 3000;
+        scene = new THREE.Scene();
+        // table
+        for ( let i = 0; i < table.length; i += 3 ) {
+          const element = document.createElement( 'div' );
+          element.className = 'element element-background';
+          const thumbnail = document.createElement( 'a' );
+          thumbnail.href = 'https://www.youtube.com/watch?v=' + table[i];
+          thumbnail.target = '_blank';
+          const image = document.createElement( 'img' );
+          image.src = 'https://img.youtube.com/vi/' + table[i] + '/hqdefault.jpg';
+          image.className = 'element-image';
+          thumbnail.appendChild( image );
+          element.appendChild( thumbnail );
+          const objectCSS = new CSS3DObject( element );
+          objectCSS.position.x = Math.random() * 4000 - 2000;
+          objectCSS.position.y = Math.random() * 4000 - 2000;
+          objectCSS.position.z = Math.random() * 4000 - 2000;
+          scene.add( objectCSS );
+          objects.push( objectCSS );
+          //
+          const object = new THREE.Object3D();
+          object.position.x = ( table[ i + 1 ] * 360 ) - 1600;
+          object.position.y = - ( table[ i + 2 ] * 280 ) + 990;
+          targets.table.push( object );
+        }
+        // sphere
+        const vector = new THREE.Vector3();
+        for ( let i = 0, l = objects.length; i < l; i ++ ) {
+          const phi = Math.acos( - 1 + ( 2 * i ) / l );
+          const theta = Math.sqrt( l * Math.PI ) * phi;
+          const object = new THREE.Object3D();
+          object.position.setFromSphericalCoords( 900, phi, theta );
+          vector.copy( object.position ).multiplyScalar( 2 );
+          object.lookAt( vector );
+          targets.sphere.push( object );
+        }
+        // helix
+        for ( let i = 0, l = objects.length; i < l; i ++ ) {
+          const theta = i * 0.28 + Math.PI;
+          const y = - ( i * 15 ) + 600;
+          const object = new THREE.Object3D();
+          object.position.setFromCylindricalCoords( 1200, theta, y );
+          vector.x = object.position.x * 2;
+          vector.y = object.position.y;
+          vector.z = object.position.z * 2;
+          object.lookAt( vector );
+          targets.helix.push( object );
+        }
+        // grid
+        for ( let i = 0; i < objects.length; i ++ ) {
+          const object = new THREE.Object3D();
+          object.position.x = ( ( i % 4 ) * 500 ) - 800;
+          object.position.y = ( - ( Math.floor( i / 4 ) % 4 ) * 500 ) + 800;
+          object.position.z = ( Math.floor( i / 16 ) ) * 1000 - 2000;
+          targets.grid.push( object );
+        }
+        renderer = new CSS3DRenderer();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        document.getElementById( 'container' ).appendChild( renderer.domElement );
+        controls = new TrackballControls( camera, renderer.domElement );
+        controls.minDistance = 500;
+        controls.maxDistance = 20000;
+        controls.noPan = false;
+        controls.noZoom = false;
+        controls.addEventListener( 'change', render );
+        const buttonTable = document.getElementById( 'table' );
+        buttonTable.addEventListener( 'click', function () {
+          transform( targets.table, 1000 );
+        } );
+        const buttonSphere = document.getElementById( 'sphere' );
+        buttonSphere.addEventListener( 'click', function () {
+          transform( targets.sphere, 1000 );
+        } );
+        const buttonHelix = document.getElementById( 'helix' );
+        buttonHelix.addEventListener( 'click', function () {
+          transform( targets.helix, 1000 );
+        } );
+        const buttonGrid = document.getElementById( 'grid' );
+        buttonGrid.addEventListener( 'click', function () {
+          transform( targets.grid, 1000 );
+        } );
+        transform( targets.helix, 1000 );
+        window.addEventListener( 'resize', onWindowResize );
+      }
+      function transform( targets, duration ) {
+        TWEEN.removeAll();
+        for ( let i = 0; i < objects.length; i ++ ) {
+          const object = objects[ i ];
+          const target = targets[ i ];
+          new TWEEN.Tween( object.position )
+            .to( { x: target.position.x, y: target.position.y, z: target.position.z }, duration )
+            .easing( TWEEN.Easing.Exponential.InOut )
+            .start();
+          new TWEEN.Tween( object.rotation )
+            .to( { x: target.rotation.x, y: target.rotation.y, z: target.rotation.z }, duration )
+            .easing( TWEEN.Easing.Exponential.InOut )
+            .start();
+        }
+        new TWEEN.Tween( this )
+          .to( {}, duration * 2 )
+          .onUpdate( render )
+          .start();
+      }
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        render();
+      }
+      function animate() {
+        requestAnimationFrame( animate );
+        TWEEN.update();
+        controls.update();
+      }
+      function render() {
+        renderer.render( scene, camera );
+      }
+      // Help icon functionality
+      document.getElementById('help').addEventListener('click', () => {
+        const helpText = document.getElementById('helpText');
+        helpText.style.display = helpText.style.display === 'none' ? 'block' : 'none';
+      });
+    </script>
+  </body>
+</html>
